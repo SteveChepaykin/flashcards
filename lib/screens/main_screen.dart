@@ -1,3 +1,4 @@
+import 'package:flashcards/models/card_model.dart';
 import 'package:flashcards/models/tag_model.dart';
 import 'package:flashcards/screens/addcard_screen.dart';
 import 'package:flashcards/screens/addtag_screen.dart';
@@ -45,7 +46,7 @@ class _MainScreenState extends State<MainScreen> {
         actions: [
           DropdownButtonHideUnderline(
             child: DropdownButton<Tag?>(
-              icon: const Icon(Icons.filter_list_rounded),
+              icon: const Icon(Icons.filter_alt_rounded, color: Colors.white,),
               value: filter,
               items: [
                 const DropdownMenuItem(
@@ -96,8 +97,8 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ],
       ),
-      body: Hive.box('cards').values.isEmpty
-          ? const Center(child: Text('У вас еще нет карточек. Создайте несолько!'))
+      body: Hive.box<CardModel>('cards').values.length < 3
+          ? const Center(child: Text('У вас слишком мало карточек. Создайте несолько!'))
           : Center(
               child: CardCarousel(
               filter: filter,

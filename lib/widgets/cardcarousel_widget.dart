@@ -43,11 +43,14 @@ class _CardCarouselState extends State<CardCarousel> {
             card.rating += option;
             option = 0;
             card.save();
-            cards.sort((a, b) => a.rating.compareTo(b.rating));
+            var nocur = cards.where((element) => element != card).toList();
+            nocur.sort((a, b) => a.rating.compareTo(b.rating));
             if (counter % 4 == 0) {
-              card = cards[_random.nextInt((cards.length / 2).floor()) + (cards.length / 2).ceil()];
+              // card = nocur[_random.nextInt((nocur.length / 2).ceil()) + (nocur.length / 2).floor()];
+              card = nocur.getRange((nocur.length / 2).ceil(), nocur.length).toList()[_random.nextInt((nocur.length / 2).ceil())];
             } else {
-              card = cards[_random.nextInt((cards.length / 2).floor())];
+              // card = nocur[_random.nextInt((nocur.length / 2).ceil())];
+              card = nocur.getRange(0, (nocur.length / 2).ceil()).toList()[_random.nextInt((nocur.length / 2).ceil())];
             }
             hasAnswered = false;
             counter += 1;
@@ -57,7 +60,7 @@ class _CardCarouselState extends State<CardCarousel> {
       },
       front: Container(
         padding: const EdgeInsets.all(20),
-        width: MediaQuery.of(context).size.width / 2,
+        width: MediaQuery.of(context).size.width / 1.5,
         height: MediaQuery.of(context).size.height / 2,
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: Colors.blue[200]),
         child: Center(
@@ -69,7 +72,7 @@ class _CardCarouselState extends State<CardCarousel> {
       ),
       back: Container(
         padding: const EdgeInsets.all(10),
-        width: MediaQuery.of(context).size.width / 2,
+        width: MediaQuery.of(context).size.width / 1.5,
         height: MediaQuery.of(context).size.height / 2,
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: Colors.blue[200]),
         child: Column(
@@ -84,6 +87,7 @@ class _CardCarouselState extends State<CardCarousel> {
               indent: 10,
               endIndent: 10,
               color: Colors.black54,
+              thickness: 2,
             ),
             Text(
               card.meaning,

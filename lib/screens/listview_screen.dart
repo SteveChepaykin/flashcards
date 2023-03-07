@@ -53,7 +53,7 @@ class _ListViewScreenState extends State<ListViewScreen> {
                     var list = Hive.box<CardModel>('cards').values.toList();
                     return ListTile(
                       title: Text(list[index].word),
-                      subtitle: Text(list[index].meaning),
+                      subtitle: Text(list[index].meaning, overflow: TextOverflow.ellipsis,),
                       trailing: IconButton(
                         onPressed: () {
                           list[index].delete();

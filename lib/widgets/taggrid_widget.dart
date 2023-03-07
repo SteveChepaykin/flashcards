@@ -16,7 +16,8 @@ class _TagsGridState extends State<TagsGrid> {
   @override
   Widget build(BuildContext context) {
     return GridView.count(
-      crossAxisCount: 4,
+      crossAxisCount: 2,
+      childAspectRatio: 2,
       children: [
         ...Hive.box<Tag>('tags')
             .values
@@ -43,6 +44,14 @@ class _TagsGridState extends State<TagsGrid> {
                       borderRadius: BorderRadius.all(Radius.circular(10))
                     ),
                   ),
+                  // child: Container(
+                  //   decoration: BoxDecoration(
+                  //     border: Border.all(color: Colors.black54),
+                  //     borderRadius: BorderRadius.circular(10),
+                  //   ),
+                  //   padding: const EdgeInsets.all(4),
+                  //   child: Text(e.name),
+                  // ),
                 ),
               ),
             )
