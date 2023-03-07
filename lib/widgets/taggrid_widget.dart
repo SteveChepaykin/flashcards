@@ -37,7 +37,11 @@ class _TagsGridState extends State<TagsGrid> {
                   },
                   child: Chip(
                     label: Text(e.name),
-                    backgroundColor: tags.contains(e) ? Colors.blue : Colors.white,
+                    backgroundColor: tags.contains(e) ? Colors.blue[300] : Colors.white,
+                    shape: const RoundedRectangleBorder(
+                      side: BorderSide(color: Colors.black54),
+                      borderRadius: BorderRadius.all(Radius.circular(10))
+                    ),
                   ),
                 ),
               ),

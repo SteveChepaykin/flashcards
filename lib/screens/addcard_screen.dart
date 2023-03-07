@@ -18,7 +18,10 @@ class _AddCardScreenState extends State<AddCardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text('Новая карточка'),
+        backgroundColor: Colors.blue[200],
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 40),
         child: Column(
@@ -28,7 +31,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: Colors.blue[300],
+                color: Colors.blue[200],
               ),
               child: TextField(
                 maxLines: 1,
@@ -36,22 +39,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                 style: const TextStyle(fontSize: 20),
                 decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: 'Work email adress',
-                    hintStyle: TextStyle(color: Colors.black.withOpacity(0.4), fontSize: 20),
-                    contentPadding: const EdgeInsets.all(25)),
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Colors.blue[300],
-              ),
-              child: TextField(
-                controller: meancont,
-                style: const TextStyle(fontSize: 20),
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Work email adress',
+                    hintText: 'Слово...',
                     hintStyle: TextStyle(color: Colors.black.withOpacity(0.4), fontSize: 20),
                     contentPadding: const EdgeInsets.all(25)),
               ),
@@ -59,8 +47,31 @@ class _AddCardScreenState extends State<AddCardScreen> {
             const SizedBox(
               height: 20,
             ),
-            SizedBox(
-              height: 300,
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.blue[200],
+              ),
+              child: TextField(
+                controller: meancont,
+                style: const TextStyle(fontSize: 20),
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'Значение...',
+                    hintStyle: TextStyle(color: Colors.black.withOpacity(0.4), fontSize: 20),
+                    contentPadding: const EdgeInsets.all(25)),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            const Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Категории',
+                  style: TextStyle(fontSize: 16, color: Colors.black87),
+                )),
+            Expanded(
               child: TagsGrid(add: (e) {
                 tags.add(e);
               }, delete: (e) {
@@ -90,7 +101,10 @@ class _AddCardScreenState extends State<AddCardScreen> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
-                child: const Text('добавить карточку')),
+                child: const Text(
+                  'добавить карточку',
+                  style: TextStyle(fontSize: 18),
+                )),
           ],
         ),
       ),

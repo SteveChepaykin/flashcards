@@ -14,7 +14,10 @@ class _AddTagScreenState extends State<AddTagScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text('Новая категория'),
+        backgroundColor: Colors.blue[200],
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 40),
         child: Column(
@@ -24,36 +27,38 @@ class _AddTagScreenState extends State<AddTagScreen> {
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: Colors.blue[300],
+                color: Colors.blue[200],
               ),
               child: TextField(
                 controller: namecont,
                 style: const TextStyle(fontSize: 20),
                 decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Work email adress',
-                  hintStyle: TextStyle(color: Colors.black.withOpacity(0.4), fontSize: 20),
-                  contentPadding: const EdgeInsets.all(25)
-                ),
+                    border: InputBorder.none,
+                    hintText: 'Название...',
+                    hintStyle: TextStyle(color: Colors.black.withOpacity(0.4), fontSize: 20),
+                    contentPadding: const EdgeInsets.all(25)),
               ),
             ),
-            const SizedBox(height: 20,),
+            const Spacer(),
             ElevatedButton(
-        onPressed: () {
-          if(namecont.text != '') {
-            var tag = Tag(namecont.text);
-            Hive.box<Tag>('tags').add(tag);
-            Navigator.pop(context);
-          }
-        },
-        style: ElevatedButton.styleFrom(
-          minimumSize: const Size.fromHeight(70),
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-        ),
-        child: const Text('добавить категорию')),
+                onPressed: () {
+                  if (namecont.text != '') {
+                    var tag = Tag(namecont.text);
+                    Hive.box<Tag>('tags').add(tag);
+                    Navigator.pop(context);
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size.fromHeight(70),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                child: const Text(
+                  'добавить категорию',
+                  style: TextStyle(fontSize: 18),
+                )),
           ],
         ),
       ),

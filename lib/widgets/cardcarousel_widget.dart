@@ -1,10 +1,14 @@
 import 'package:flashcards/models/card_model.dart';
+import 'package:flashcards/models/tag_model.dart';
+import 'package:flip_card/flip_card.dart';
+import 'package:flip_card/flip_card_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import "dart:math";
 
 class CardCarousel extends StatefulWidget {
-  const CardCarousel({super.key});
+  final Tag? filter;
+  const CardCarousel({super.key, required this.filter});
 
   @override
   State<CardCarousel> createState() => _CardCarouselState();
@@ -12,65 +16,115 @@ class CardCarousel extends StatefulWidget {
 
 class _CardCarouselState extends State<CardCarousel> {
   bool hasAnswered = false;
-  final cards = Hive.box<CardModel>('cards').values.toList();
+  int option = 0;
+  int counter = 0;
+  List<CardModel> cards = Hive.box<CardModel>('cards').values.toList();
   late CardModel card;
   final _random = Random();
+  late FlipCardController flipcontroller;
 
   @override
   void initState() {
+    if (widget.filter != null) {
+      cards = cards.where((element) => element.tags.contains(widget.filter)).toList();
+    }
     card = cards[_random.nextInt(cards.length)];
+    flipcontroller = FlipCardController();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.grey,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(card.word),
-              if (hasAnswered)
-                const SizedBox(
-                  height: 20,
-                ),
-              if (hasAnswered) Text(card.meaning)
-            ],
+    return FlipCard(
+      controller: flipcontroller,
+      onFlipDone: (isFront) {
+        if (!isFront) {
+          setState(() {
+            card.rating += option;
+            option = 0;
+            card.save();
+            cards.sort((a, b) => a.rating.compareTo(b.rating));
+            if (counter % 4 == 0) {
+              card = cards[_random.nextInt((cards.length / 2).floor()) + (cards.length / 2).ceil()];
+            } else {
+              card = cards[_random.nextInt((cards.length / 2).floor())];
+            }
+            hasAnswered = false;
+            counter += 1;
+          });
+          flipcontroller.toggleCard();
+        }
+      },
+      front: Container(
+        padding: const EdgeInsets.all(20),
+        width: MediaQuery.of(context).size.width / 2,
+        height: MediaQuery.of(context).size.height / 2,
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: Colors.blue[200]),
+        child: Center(
+          child: Text(
+            card.word,
+            style: const TextStyle(fontSize: 30),
           ),
         ),
-        !hasAnswered
-            ? ElevatedButton(
-                onPressed: () {
-                  setState(
-                    () {
-                      hasAnswered = true;
-                    },
-                  );
-                },
-                child: const Text('Показать ответ'),
-              )
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          card = cards[_random.nextInt(cards.length)];
-                          hasAnswered = false;
-                        });
-                      },
-                      child: const Text('дальше'))
-                ],
-              ),
-      ],
+      ),
+      back: Container(
+        padding: const EdgeInsets.all(10),
+        width: MediaQuery.of(context).size.width / 2,
+        height: MediaQuery.of(context).size.height / 2,
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: Colors.blue[200]),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              card.word,
+              style: const TextStyle(fontSize: 20),
+            ),
+            const Divider(
+              indent: 10,
+              endIndent: 10,
+              color: Colors.black54,
+            ),
+            Text(
+              card.meaning,
+              style: const TextStyle(fontSize: 20),
+            ),
+            const Spacer(),
+            Row(
+              children: [
+                const Spacer(flex: 3),
+                optionButton(-3, Icons.thumb_down_alt_rounded),
+                const Spacer(),
+                optionButton(1, Icons.back_hand_rounded),
+                const Spacer(),
+                optionButton(4, Icons.thumb_up_alt_rounded),
+                const Spacer(flex: 3)
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
+
+  Widget optionButton(int value, IconData icon) => Container(
+        height: 50,
+        width: 50,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: option == value ? Colors.black54 : Colors.white,
+            )),
+        child: IconButton(
+          onPressed: () {
+            setState(() {
+              option = value;
+            });
+          },
+          icon: Icon(
+            icon,
+            color: option == value ? Colors.black54 : Colors.white,
+          ),
+        ),
+      );
 }
