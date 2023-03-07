@@ -96,10 +96,12 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ],
       ),
-      body: Center(
-          child: CardCarousel(
-        filter: filter,
-      )),
+      body: Hive.box('cards').values.isEmpty
+          ? const Center(child: Text('У вас еще нет карточек. Создайте несолько!'))
+          : Center(
+              child: CardCarousel(
+              filter: filter,
+            )),
     );
   }
 }
