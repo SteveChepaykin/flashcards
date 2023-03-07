@@ -29,13 +29,17 @@ class _MainScreenState extends State<MainScreen> {
             ListTile(
               title: const Text('Карточки'),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const ListViewScreen(forCards: true)));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const ListViewScreen(forCards: true))).whenComplete(() {
+                  setState(() {});
+                });
               },
             ),
             ListTile(
               title: const Text('Категории'),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const ListViewScreen(forCards: false)));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const ListViewScreen(forCards: false))).whenComplete(() {
+                  setState(() {});
+                });
               },
             )
           ],
@@ -46,7 +50,10 @@ class _MainScreenState extends State<MainScreen> {
         actions: [
           DropdownButtonHideUnderline(
             child: DropdownButton<Tag?>(
-              icon: const Icon(Icons.filter_alt_rounded, color: Colors.white,),
+              icon: const Icon(
+                Icons.filter_alt_rounded,
+                color: Colors.white,
+              ),
               value: filter,
               items: [
                 const DropdownMenuItem(
@@ -89,7 +96,9 @@ class _MainScreenState extends State<MainScreen> {
                 MaterialPageRoute(
                   builder: (context) => const AddTagScreen(),
                 ),
-              );
+              ).whenComplete(() {
+                setState(() {});
+              });
             },
             icon: const Icon(
               Icons.add_circle_rounded,
@@ -102,6 +111,7 @@ class _MainScreenState extends State<MainScreen> {
           : Center(
               child: CardCarousel(
               filter: filter,
+              cards: Hive.box<CardModel>('cards').values.toList(),
             )),
     );
   }

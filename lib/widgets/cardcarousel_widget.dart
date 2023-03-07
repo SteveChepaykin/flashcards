@@ -3,12 +3,12 @@ import 'package:flashcards/models/tag_model.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flip_card/flip_card_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import "dart:math";
 
 class CardCarousel extends StatefulWidget {
   final Tag? filter;
-  const CardCarousel({super.key, required this.filter});
+  final List<CardModel> cards;
+  const CardCarousel({super.key, required this.filter, required this.cards});
 
   @override
   State<CardCarousel> createState() => _CardCarouselState();
@@ -18,7 +18,7 @@ class _CardCarouselState extends State<CardCarousel> {
   bool hasAnswered = false;
   int option = 0;
   int counter = 0;
-  List<CardModel> cards = Hive.box<CardModel>('cards').values.toList();
+  late List<CardModel> cards;
   late CardModel card;
   final _random = Random();
   late FlipCardController flipcontroller;
@@ -26,9 +26,11 @@ class _CardCarouselState extends State<CardCarousel> {
   @override
   void initState() {
     if (widget.filter != null) {
-      cards = cards.where((element) => element.tags.contains(widget.filter)).toList();
+      cards = widget.cards.where((element) => element.tags.contains(widget.filter)).toList();
+    } else {
+      cards = widget.cards;
     }
-    card = cards[_random.nextInt(cards.length)];
+    card = widget.cards[_random.nextInt(widget.cards.length)];
     flipcontroller = FlipCardController();
     super.initState();
   }
@@ -67,6 +69,7 @@ class _CardCarouselState extends State<CardCarousel> {
           child: Text(
             card.word,
             style: const TextStyle(fontSize: 30),
+            textAlign: TextAlign.center,
           ),
         ),
       ),
