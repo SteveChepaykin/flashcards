@@ -25,11 +25,12 @@ class _CardCarouselState extends State<CardCarousel> {
 
   @override
   void initState() {
-    if (widget.filter != null) {
-      cards = widget.cards.where((element) => element.tags.contains(widget.filter)).toList();
-    } else {
-      cards = widget.cards;
-    }
+    // if (widget.filter != null) {
+    //   cards = widget.cards.where((element) => element.tags.contains(widget.filter)).toList();
+    // } else {
+    //   cards = widget.cards;
+    // }
+    cards = widget.cards;
     card = widget.cards[_random.nextInt(widget.cards.length)];
     flipcontroller = FlipCardController();
     super.initState();

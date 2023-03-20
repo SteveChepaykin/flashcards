@@ -31,9 +31,7 @@ class _ListViewScreenState extends State<ListViewScreen> {
                 setState(() {});
               });
             },
-            icon: Icon(
-              widget.forCards ? Icons.add_box_rounded : Icons.add_circle_rounded
-            ),
+            icon: Icon(widget.forCards ? Icons.add_box_rounded : Icons.add_circle_rounded),
           ),
         ],
       ),
@@ -53,10 +51,15 @@ class _ListViewScreenState extends State<ListViewScreen> {
                     var list = Hive.box<CardModel>('cards').values.toList();
                     return ListTile(
                       title: Text(list[index].word),
-                      subtitle: Text(list[index].meaning, overflow: TextOverflow.ellipsis,),
+                      subtitle: Text(
+                        list[index].meaning,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                       trailing: IconButton(
                         onPressed: () {
-                          list[index].delete();
+                          setState(() {
+                            Hive.box<CardModel>('cards').delete(list[index].key);
+                          });
                         },
                         icon: const Icon(Icons.delete),
                       ),
@@ -67,7 +70,9 @@ class _ListViewScreenState extends State<ListViewScreen> {
                       title: Text(list[index].name),
                       trailing: IconButton(
                         onPressed: () {
-                          list[index].delete();
+                          setState(() {
+                            Hive.box<CardModel>('cards').delete(list[index].key);
+                          });
                         },
                         icon: const Icon(Icons.delete),
                       ),

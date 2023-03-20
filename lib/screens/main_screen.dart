@@ -111,7 +111,14 @@ class _MainScreenState extends State<MainScreen> {
           : Center(
               child: CardCarousel(
               filter: filter,
-              cards: Hive.box<CardModel>('cards').values.toList(),
+              cards: Hive.box<CardModel>('cards')
+                  .values
+                  .where((element) => filter != null 
+                    // ? element.tags.map((e) => e.name).toList().contains(filter!.name) 
+                    ? element.tags.contains(filter)
+                    : true,
+                  )
+                  .toList(),
             )),
     );
   }
