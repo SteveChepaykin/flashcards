@@ -90,8 +90,9 @@ class _AddCardScreenState extends State<AddCardScreen> {
                       rating: 0,
                       tags: tags,
                     );
-                    Hive.box<CardModel>('cards').add(card);
-                    Navigator.pop(context);
+                    Hive.box<CardModel>('cards').add(card).whenComplete(() {
+                      Navigator.pop(context);
+                    });
                   }
                 },
                 style: ElevatedButton.styleFrom(

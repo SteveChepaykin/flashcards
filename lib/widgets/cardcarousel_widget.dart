@@ -37,6 +37,14 @@ class _CardCarouselState extends State<CardCarousel> {
   }
 
   @override
+  void didUpdateWidget(covariant CardCarousel oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.cards.length != oldWidget.cards.length) {
+      cards = widget.cards;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FlipCard(
       controller: flipcontroller,
